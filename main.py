@@ -1,14 +1,12 @@
 import speech_recognition as sr
 import webbrowser
 import pyttsx3
-import pygame
 import musicLibrary
+import sys
 # pip install pocketsphinx
 
 recognizer = sr.Recognizer()
 engine = pyttsx3.init()
-
-pygame.mixer.init()
 
 
 def speak(text):
@@ -20,12 +18,10 @@ def play_music(song_name):
     song_name = song_name.lower().strip()
 
     if song_name in musicLibrary.songs:
-        file_path = musicLibrary.songs[song_name]
+        link = musicLibrary.songs[song_name]
         speak(f"Playing {song_name}")
-        print(f"Playing: {file_path}")
-
-        pygame.mixer.music.load(file_path)
-        pygame.mixer.music.play()
+        print(f"Playing: {link}")
+        webbrowser.open(link)
     else:
         speak("Sorry, I don't have that song")
         print(f"Song not found: {song_name}")
@@ -51,9 +47,10 @@ def processCommand(c):
             play_music(song)
         else:
             speak("Please tell me the song name")
-    elif "stop music" in c or "pause music" in c:
-        pygame.mixer.music.stop()
-        speak("Music stopped")
+    elif "stop" in c or "exit" in c or "quit" in c or "shut down" in c or "bye" in c:
+        speak("Goodbye, shutting down")
+        print("Shutting down...")
+        sys.exit()
     else:
         speak("Sorry, I did not understand that command")
         print("No matching command found.")
